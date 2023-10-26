@@ -1,0 +1,109 @@
+body {
+    font-family:微軟正黑體;
+    margin:0px;
+  }
+
+  h1 {
+    font-weight:bold;
+    font-size:36px;
+    color: #233F69;
+    text-shadow:2px 2px 4px gray;
+    border-left:4px solid red;
+    padding-left: 10px;
+    line-height: 1em;
+  }
+
+  h2 {
+    font-size:24px;
+    color:black;
+    text-shadow:1px 1px 3px gray;
+  }
+
+  p {
+    font-size:12pt;
+    line-height:1.8; /* 行高 */
+  }
+
+  #wrap{
+    margin:0px;
+  }
+
+  #container{
+    width: 90%;
+    margin:10px auto;
+  }
+
+  #header{
+    font-weight:bold;
+  }
+
+  #main{
+    
+    position: relative;
+  }
+
+  #sidebar_left{
+    position: absolute;
+    top:0px;
+    left: 0px;
+    width: 22%;
+  }
+
+  #content{
+    position: relative;
+    top:0px;
+    left: 22%;
+    width: 50%;
+    padding: 5px;
+    border-left: 2px solid #cfcfcf;
+    border-right: 2px solid #cfcfcf;
+  }
+
+  #sidebar{
+    position: absolute;
+    top:0px;
+    left: 75%;
+    width: 25%;
+  }
+
+  #footer{
+    font-weight:bold;
+  }
+
+  ul.nav{
+    background-color: #EDEDED;
+    height:40px;  /* 讓工具列不要太扁 */
+    line-height: 40px;  /* 讓按鍵垂直置中 */
+    padding: 0px; /* 取消工具列左邊的空白 */
+  }
+
+  ul.nav li{
+    display: inline;  /* 讓清單變成一橫列 */
+    list-style-type:none; /* 把項目符號取消 */
+  }
+
+  ul.nav li > a{  /* 正常狀態的連結按鈕 */
+    color:black;  /* 黑色 */
+    text-decoration: none;  /* 去除底線 */
+    padding: 10px 20px; /* 和隔壁按鈕區隔開來 */
+  }
+
+  ul.nav li > a:hover{  /* 滑鼠移到連結按鈕上時 */
+    color:white;  /* 文字變白色 */
+    background-color: #B31C1C;  /* 背景變紅色 */
+  }
+
+
+/*qwertyuiop*/
+
+
+
+/*超連結color*/
+
+h1{font-family:標楷體;}
+
+a:link{color:navy;}
+a:visited{color:navy;}
+a:hover{color:rgb(228, 228, 0);}
+
+
