@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <link rel="icon" href="../picture/favicon.ico" type="image/x-icon"/>
+    <meta charset="UTF-8">
+    <title>小峰的官網-經緯度工具</title>
+</head>
+<body>
+<h1>經緯度</h1>
+<br>
+<h1 id="ans"></h1>
+<h1 id="anss"></h1>
+<h1 id="ansss"></h1>
+<h1 id="an"></h1>
+</body>
+<script>  
+    navigator.geolocation.getCurrentPosition(successCallback);  
+    function successCallback(position){  
+        var lat = position.coords.latitude;  
+        var long = position.coords.longitude;
+        var height = position.coords.altitude;
+        var head = position.coords.heading;
+        var speed = position.coords.speed;
+        var heightams = "高度:" + height + " m";
+        var ans = "經度:"+ lat + ";緯度:" + long;
+        var h = "方位:"+ head + "度";
+        var hs= "速度:"+ speed + " m/s";
+        
+        document.getElementById("ans").innerHTML = ans;
+        document.getElementById("anss").innerHTML = heightams;
+        document.getElementById("ansss").innerHTML = h;
+        document.getElementById("an").innerHTML = hs;
+    }
+</script>  

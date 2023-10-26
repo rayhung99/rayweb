@@ -25,60 +25,45 @@
 
       <script src="https://kit.fontawesome.com/3b637070fb.js" crossorigin="anonymous"></script>
         
-      <div id="fb-root"></div>
-      <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v13.0" nonce="jCWqBau9"></script>
 
       <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'></script>
+
+      <script language="JavaScript">
+        var currentMenu = 1;
+        function ShowSubMenu(id) {
+          if (document.all["SubMenu" + id].style.display == "") {
+            document.all["SubMenu" + id].style.display = "none";
+            currentMenu = 0;
+          }
+          else {
+            if (currentMenu != 0) { document.all["SubMenu" + currentMenu].style.display = "none"; }
+            document.all["SubMenu" + id].style.display = "";
+            currentMenu = id;
+          }
+        }
+      </script>
+
 
     </head>
 
     <body bgcolor="#c0c0c0">
 
-      <!-- Messenger 洽談外掛程式 Code -->
-      <div id="fb-root"></div>
-
-      <!-- Your 洽談外掛程式 code -->
-      <div id="fb-customer-chat" class="fb-customerchat">
-      </div>
-
-      <script>
-        var chatbox = document.getElementById('fb-customer-chat');
-        chatbox.setAttribute("page_id", "112514451360517");
-        chatbox.setAttribute("attribution", "biz_inbox");
-      </script>
-
-      <!-- Your SDK code -->
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            xfbml            : true,
-            version          : 'v13.0'
-          });
-        };
-
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = 'https://connect.facebook.net/zh_HK/sdk/xfbml.customerchat.js';
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-      </script>
 
       <p>
         <marquee bgcolor="#00ffe1" behavior="alternate" direction="right">
-          小峰的官網
+          小峰的官網4.0.1上線
         </marquee>
       </p>
 
+      <!--頂部橫向連結-->
       <div id="wrap">
         <div id="container">
           <div id="header">
             <a name="tool"></a>
             <ul class="nav">
-              <li><a href="#p1">小峰的官網_相關網站</a></li>
-              <li><a href="#p2">即時空氣品質資訊</a></li>
-              <li><a href="#p3"> </a></li>
+              <li><a href="https://www.tyjh.kh.edu.tw/view/index.php?WebID=218" target="_blank">左中校網</a></li>
+              <li><a href="https://fatraceschool.k12ea.gov.tw/frontend/search.html?county=34&area=131623&school_type=3&school=64736875&period=" target="_blank">午餐吃啥</a></li>
+              <li><a href="#p1"> </a></li>
               <li><a href="#p4"> </a></li>
             </ul>
           </div>
@@ -99,7 +84,11 @@
 
               <!--學生園地-->
               <br>
-              <h2>常用連結</h2>    
+              <h2 onclick="if(document.getElementById('myidp3').style.display=='none'){document.getElementById('myidp3').style.display = 'block';}else{document.getElementById('myidp3').style.display='none'}">
+              常用連結</h2>
+
+              <span id="myidp3" style="display:none;">
+
                   <a href="http://netholiday.kh.edu.tw/" target="_blank" title="學生園地 - 上網飆作業（此項連結開啟新視窗）">上網飆作業
                   </a>
                   <br>
@@ -109,63 +98,38 @@
                   <a href="https://www.pagamo.org/" target="_blank" title="學生園地 - PaGamO（此項連結開啟新視窗）">PaGamO
                   </a>
                   <br>
-                  <a href="https://www.coolenglish.edu.tw/https://www.coolenglish.edu.tw/" target="_blank" title="Cool English（此項連結開啟新視窗）">Cool English
-                  </a>
-                  <br>
-                  <a href="https://www.skps.kh.edu.tw/" target="_blank">新光國民小學
-                  </a>
-                  <br>
-                  <a href="https://class.kh.edu.tw/14978" target="_blank">503班網
-                  </a>
-              <h2>小峰推薦網站</h2>    
+
+              </span>
+
+              <h2 onclick="if(document.getElementById('myidp2').style.display=='none'){document.getElementById('myidp2').style.display = 'block';}else{document.getElementById('myidp2').style.display='none'}">電子書</h2>
+
+              <span id="myidp2" style="display:none;">
+
                   <a href="https://knsh-etools.s3.ap-northeast-1.amazonaws.com/KNSH/All/web_ebook/home/index.html" target="_blank">康軒網頁版電子書</a>
                   <br>
                   👆a101 qweiop
                   <br>
-                    
+              </span>
 
-              <h2 id="p1">小峰的官網_相關網站(7)</h2>
-                  
-                  <a href="https://rayhung.tk/" target="_blank">小峰的官網</a>
-                  <br>
-                  <a href="https://rayhung.tk/shop">小峰雜貨店</a>
-                  <br>
-                  <a href="https://rayhung.tk/50300.html" target="_parent">503</a>
-                  <br>
-                  <a href="https://rayhung.tk/ys.html" target="_blank">宇珅的官網</a>
-                  <br>
-                  <a href="https://rayhung.tk/%E7%B6%93%E7%B7%AF%E5%BA%A6%E5%B7%A5%E5%85%B7/" target="_blank">經緯度工具</a>
-                  <br>
-                  <FORM>
-                      <input type="button" value="小峰的官網-機密區" onClick="passWord()">
-                  </FORM>
+              <h2 id="p1" onclick="if(document.getElementById('myidp1').style.display=='none'){document.getElementById('myidp1').style.display = 'block';}else{document.getElementById('myidp1').style.display='none'}">有的沒的</h2>
 
-                      
-                  <FORM>
-                      <input type="button" value="哈密瓜專區" onClick="passWordhhh()">
-                  </FORM>
+              <span id="myidp1" style="display:none;">
+
+                <a href="https://119119.ddns.net/t01.html" target="_blank">經緯度工具</a>
+                <br>
+
+              </span>
+
             </div>
 
             <div id="content">
               <h1>最新消息</h1>
-                <h2>小峰的官網改版了!</h2>
+                <h2>小峰的官網4.0.1上線!</h2>
             </div>
 
             <div id="sidebar">
                   <!--AirQuality-->
                   <iframe width="300" height="370" id="p2" src="https://airtw.epa.gov.tw/AirQuality_APIs/WebWidget.aspx?site=17" scrolling="no"></iframe>
-
-                  <!--喜悅網-->
-                  <div> 	     
-                      <a href="http://163.16.5.171/index.html" target="_blank"><img  src="picture/1.png" border="0" align="absmiddle" alt="喜悅網（此項連結開啟新視窗）" title="喜悅網（此項連結開啟新視窗）" style="float: right;"></a>
-                  </div>
-                  <br>
-
-                  <!--icrt-->
-                  <div>
-                      <a href="https://www.icrt.com.tw/app/news-lunchbox/listen.php" target="_blank"><img src="picture/ray03.jpg" width="130" height="60" border="0" align="absmiddle" style="float: right;" alt="ICRT（此項連結開啟新視窗）" title="ICRT（此項連結開啟新視窗）"></a>
-                  </div>
-                  <br>
 
                   <!--上網飆寒假作業-->
                   <div>
@@ -183,8 +147,6 @@
             <!--whos.amung.us-->
             <script id="_wauys5">var _wau = _wau || []; _wau.push(["classic", "0iu79q5h03", "ys5"]);</script><script async src="//waust.at/c.js"></script>
             <br>
-            <!-- 網頁計數器 -->
-            <img src="https://www.mfwzjsq.com/hit.php?id=zeoonp&nd=6&style=39" border="0" alt="網頁計數器">
             <p>感謝</p>
             <i class="fa-brands fa-cloudflare"></i>
             <i class="fa-brands fa-github"></i>
@@ -197,8 +159,8 @@
         //<![CDATA[
         (function () {
         $("body").append("<img id='goTopButton' style='display: none; z-index: 5; cursor: pointer;' title='回到頂端'/>");
-        var img = "http://1.bp.blogspot.com/-zMfrIkyhlVs/Uh7FePoKU8I/AAAAAAAAHnA/WA0H_vbWAWc/s1600/go-top.png",
-        locatioin = 3/4, // 按鈕出現在螢幕的高度
+        var img = "picture/go-top.png",
+        locatioin = 5/6, // 按鈕出現在螢幕的高度
         right = 10, // 距離右邊 px 值
         opacity = 0.4, // 透明度
         speed = 900, // 捲動速度
@@ -233,6 +195,6 @@
         <!--thanks to https://www.tad0616.net/modules/tad_book3/page.php?tbdsn=916 -->
 
     </body>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
   </html>
 <!--END Of ALL  BY rayhung-->
