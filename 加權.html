@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加權值計算</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .main {
+            width: 70%;
+            padding: 20px;
+        }
+        .history {
+            width: 30%;
+            padding: 20px;
+            border-left: 2px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .history h2 {
+            margin-top: 0;
+        }
+    </style>
+    <script>
+        const weights = [5 / 18, 2 / 9, 1 / 6, 1 / 6, 1 / 6];
+        const subjects = ["國文", "英文", "數學", "自然", "社會"];
+        let values = [];
+
+        function init() {
+            document.getElementById("subjectLabel").textContent = `請輸入 ${subjects[0]} 的成績：`;
+            document.getElementById("inputValues").value = "";
+            values = [];
+        }
+
+        function handleInput(event) {
+            if (event.key === "Enter") {
+                const inputValue = Number(event.target.value);
+
+                // 驗證輸入是否為有效數字
+                if (isNaN(inputValue) || inputValue < 0 || inputValue > 100) {
+                    alert("請輸入有效的成績（0-100）！");
+                    return;
+                }
+
+                // 存儲成績並清空輸入框
+                values.push(inputValue);
+                event.target.value = "";
+
+                // 切換到下一個科目
+                if (values.length < subjects.length) {
+                    document.getElementById("subjectLabel").textContent = `請輸入 ${subjects[values.length]} 的成績：`;
+                } else {
+                    calculateWeightedSum();
+                    init(); // 恢復初始狀態
+                }
+            }
+        }
+
+        function calculateWeightedSum() {
+            let weightedSum = 0;
+
+            // 計算加權總和
+            for (let i = 0; i < values.length; i++) {
+                weightedSum += values[i] * weights[i];
+            }
+
+            // 顯示結果並記錄到右側
+            const resultText = `成績：${values.join(", ")} | 加權總和：${weightedSum.toFixed(2)}`;
+            const historyList = document.getElementById("historyList");
+            const newRecord = document.createElement("p");
+            newRecord.textContent = resultText;
+            historyList.appendChild(newRecord);
+
+            alert(`加權總和：${weightedSum.toFixed(2)}`);
+        }
+    </script>
+</head>
+<body onload="init()">
+    <!-- 主區域 -->
+    <div class="main">
+        <h1>加權值計算</h1>
+        <p id="subjectLabel"></p>
+        <input type="text" id="inputValues" placeholder="按 Enter 鍵確認" onkeypress="handleInput(event)">
+    </div>
+
+    <!-- 計算紀錄 -->
+    <div class="history">
+        <h2>計算紀錄</h2>
+        <div id="historyList"></div>
+    </div>
+</body>
+</html>
