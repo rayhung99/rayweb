@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拍手計時器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        #status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .waiting {
+            background-color: #f0f0f0;
+        }
+        .listening {
+            background-color: #ffeb3b;
+        }
+        .detected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #result {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .threshold-control {
+            margin: 15px 0;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        #permissionHelp {
+            color: red;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>拍手計時器</h1>
+    
+    <div class="instructions">
+        <p><strong>使用說明：</strong></p>
+        <ol>
+            <li>點擊"開始錄音"按鈕</li>
+            <li>第一次拍手 - 開始計時</li>
+            <li>第二次拍手 - 停止計時並顯示時間間隔</li>
+            <li>點擊"停止錄音"結束</li>
+        </ol>
+        <p><strong>注意：</strong>請在安全環境(HTTPS或localhost)中使用</p>
+        <p id="permissionHelp">如果沒有彈出麥克風權限請求，請檢查瀏覽器設定或嘗試重新整理頁面。</p>
+    </div>
+    
+    <button id="startBtn">開始錄音</button>
+    <button id="stopBtn" disabled>停止錄音</button>
+    
+    <div class="threshold-control">
+        <label for="threshold">敏感度設定: </label>
+        <input type="range" id="threshold" min="1" max="100" value="50">
+        <span id="thresholdValue">50%</span>
+    </div>
+    
+    <div id="status" class="waiting">請點擊"開始錄音"按鈕</div>
+    
+    <div id="result"></div>
+
+    <script>
+        // 獲取DOM元素
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const statusDiv = document.getElementById('status');
+        const resultDiv = document.getElementById('result');
+        const thresholdSlider = document.getElementById('threshold');
+        const thresholdValue = document.getElementById('thresholdValue');
+        const permissionHelp = document.getElementById('permissionHelp');
+        
+        // 音訊相關變數
+        let audioContext;
+        let analyser;
+        let microphone;
+        let isRecording = false;
+        let startTime = 0;
+        let isWaitingForFirstClap = true;
+        let threshold = 0.5;
+        let mediaStream;
+        let lastClapTime = 0;
+        
+        // 更新閾值顯示
+        thresholdSlider.addEventListener('input', function() {
+            threshold = this.value / 100;
+            thresholdValue.textContent = this.value + '%';
+        });
+        
+        // 開始錄音
+        startBtn.addEventListener('click', async function() {
+            try {
+                statusDiv.textContent = "正在請求麥克風權限...";
+                statusDiv.className = "waiting";
+                permissionHelp.style.display = "none";
+                
+                // 設置超時檢查麥克風權限
+                const permissionTimeout = setTimeout(() => {
+                    permissionHelp.style.display = "block";
+                }, 2000);
+                
+                // 請求麥克風權限
+                mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                clearTimeout(permissionTimeout);
+                
+                // 創建音訊上下文
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+                
+                // 連接麥克風到分析器
+                microphone = audioContext.createMediaStreamSource(mediaStream);
+                microphone.connect(analyser);
+                
+                // 準備數據陣列
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                
+                isRecording = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                statusDiv.textContent = "準備就緒，等待第一次拍手...";
+                statusDiv.className = "listening";
+                resultDiv.textContent = "";
+                isWaitingForFirstClap = true;
+                lastClapTime = 0;
+                
+                // 開始分析音訊
+                function analyze() {
+                    if (!isRecording) return;
+                    
+                    requestAnimationFrame(analyze);
+                    
+                    // 獲取時域數據
+                    analyser.getByteTimeDomainData(dataArray);
+                    
+                    // 檢測拍手聲
+                    if (detectClap(dataArray)) {
+                        const now = Date.now();
+                        
+                        // 忽略短於0.5秒的間隔
+                        if (now - lastClapTime < 500) {
+                            return;
+                        }
+                        lastClapTime = now;
+                        
+                        if (isWaitingForFirstClap) {
+                            // 第一次拍手 - 開始計時
+                            startTime = now;
+                            statusDiv.textContent = "已檢測到第一次拍手，等待第二次拍手...";
+                            statusDiv.className = "detected";
+                            isWaitingForFirstClap = false;
+                        } else {
+                            // 第二次拍手 - 結束計時
+                            const endTime = now;
+                            const duration = (endTime - startTime) / 1000; // 轉換為秒
+                            resultDiv.textContent = `時間間隔: ${duration.toFixed(3)} 秒`;
+                            statusDiv.textContent = "測量完成！";
+                            statusDiv.className = "waiting";
+                            
+                            // 停止錄音
+                            stopRecording();
+                        }
+                    }
+                }
+                
+                analyze();
+                
+            } catch (error) {
+                statusDiv.textContent = "錯誤: " + error.message;
+                statusDiv.className = "waiting";
+                console.error(error);
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                permissionHelp.style.display = "block";
+            }
+        });
+        
+        // 停止錄音函數
+        function stopRecording() {
+            isRecording = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            
+            if (microphone) {
+                microphone.disconnect();
+            }
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+            }
+            if (audioContext && audioContext.state !== 'closed') {
+                audioContext.close();
+            }
+        }
+        
+        // 停止按鈕事件
+        stopBtn.addEventListener('click', function() {
+            stopRecording();
+            statusDiv.textContent = "已停止";
+            statusDiv.className = "waiting";
+        });
+        
+        // 檢測拍手聲
+        function detectClap(dataArray) {
+            let max = 0;
+            let min = 1;
+            
+            // 找到當前緩衝區中的最大和最小值
+            for (let i = 0; i < dataArray.length; i++) {
+                const value = dataArray[i] / 255; // 正規化到0-1
+                if (value > max) max = value;
+                if (value < min) min = value;
+            }
+            
+            // 計算振幅
+            const amplitude = max - min;
+            
+            // 檢查是否超過閾值
+            return amplitude > threshold;
+        }
+    </script>
+</body>
+</html>
