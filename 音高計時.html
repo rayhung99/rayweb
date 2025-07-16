@@ -174,7 +174,7 @@
                         const now = Date.now();
                         
                         // 忽略短於0.5秒的間隔
-                        if (now - lastClapTime < 100) {
+                        if (now - lastClapTime < 200) {
                             return;
                         }
                         lastClapTime = now;
